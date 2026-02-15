@@ -1,0 +1,16 @@
+{
+  "private": true,
+  "name": "@maw1a/service-grpc-repo",
+  "scripts": {
+    "type-check": "tsc --noEmit"
+  },
+  "simple-git-hooks": {
+    "pre-commit": [
+      "pnpm run type-check"
+    ]
+  },
+  "devDependencies": {
+    "simple-git-hooks": "^2.13.1"
+  },
+  "packageManager": "pnpm@10.26.1"
+}

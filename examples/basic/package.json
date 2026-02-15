@@ -1,0 +1,24 @@
+{
+  "private": true,
+  "name": "@maw1a/service-grpc-examples.basic",
+  "version": "0.0.0",
+  "description": "",
+  "main": "server.ts",
+  "scripts": {
+    "start": "tsx server.ts",
+    "build:protos": "buf generate"
+  },
+  "dependencies": {
+    "@grpc/grpc-js": "^1.14.3",
+    "@maw1a/service-grpc": "workspace:*"
+  },
+  "devDependencies": {
+    "@bufbuild/buf": "^1.65.0",
+    "@bufbuild/protobuf": "^2.11.0",
+    "tsx": "^4.21.0"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "packageManager": "pnpm@10.26.1"
+}

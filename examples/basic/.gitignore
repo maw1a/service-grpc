@@ -1,0 +1,2 @@
+# ignore build protos but keep directory
+.gen/*

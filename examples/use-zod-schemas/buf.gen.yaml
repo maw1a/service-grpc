@@ -1,0 +1,9 @@
+version: v1
+plugins:
+  # ts-proto build
+  - plugin: buf.build/community/stephenh-ts-proto
+    out: .gen
+    opt:
+      - outputServices=grpc-js
+      - esModuleInterop=true
+      - useOptionals=messages

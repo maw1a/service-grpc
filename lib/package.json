@@ -1,0 +1,41 @@
+{
+  "name": "@maw1a/service-grpc",
+  "version": "0.1.0",
+  "description": "A guide to building grpc services with typescript.",
+  "keywords": [
+    "grpc",
+    "typescript",
+    "protobuf",
+    "buf",
+    "protos"
+  ],
+  "author": "maw1a <ahmedmawia.dev@gmail.com",
+  "license": "ISC",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.mjs",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "require": "./dist/index.cjs",
+      "import": "./dist/index.mjs"
+    }
+  },
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "prepare": "simple-git-hooks"
+  },
+  "dependencies": {
+    "@grpc/grpc-js": "^1.14.3"
+  },
+  "devDependencies": {
+    "tsup": "^8.0.0",
+    "tsx": "^4.21.0",
+    "typescript": "^5.7.0"
+  },
+  "packageManager": "pnpm@10.26.1"
+}

@@ -1,0 +1,27 @@
+{
+  "private": true,
+  "name": "@maw1a/service-grpc-examples.use-zod-schemas",
+  "version": "0.0.0",
+  "description": "",
+  "main": "server.ts",
+  "scripts": {
+    "start": "tsx server.ts",
+    "build:schemas": "tsx schemas/build.ts",
+    "build:protos": "pnpm build:schemas && buf generate"
+  },
+  "dependencies": {
+    "@globalart/zod-to-proto": "^2.1.0",
+    "@grpc/grpc-js": "^1.14.3",
+    "@maw1a/service-grpc": "workspace:*",
+    "zod": "^4.3.6"
+  },
+  "devDependencies": {
+    "@bufbuild/buf": "^1.65.0",
+    "@bufbuild/protobuf": "^2.11.0",
+    "tsx": "^4.21.0"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "packageManager": "pnpm@10.26.1"
+}
