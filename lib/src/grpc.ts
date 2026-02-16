@@ -1,39 +1,56 @@
-import {
-  ServerCredentials,
+import type {
   ServerOptions,
   UntypedServiceImplementation,
 } from "@grpc/grpc-js";
 import type { Service } from "./service";
+import type { ListenCallback } from "./types";
 
-import { Server } from "@grpc/grpc-js";
+import { Server, ServerCredentials } from "@grpc/grpc-js";
 
-type ListenCallback = (
-  error: Error | null,
-  port: number,
-) => void | Promise<void>;
+export class GrpcServer<Services extends Partial<{ [name: string]: Service }>> {
+  constructor(
+    private _server: Server,
+    private _services: Services,
+  ) {}
 
-class GrpcServer {
-  private server: Server;
+  public add<
+    Name extends string,
+    ServiceImplementation extends {} = UntypedServiceImplementation,
+  >(name: Name, s: Service<ServiceImplementation>) {
+    type NewServices = Services & {
+      [name in Name]: Service<ServiceImplementation>;
+    };
 
-  constructor(serverOptions: ServerOptions = {}) {
-    this.server = new Server(serverOptions);
+    this._server.addService(s.definition, s.implementation);
+    const services = { ...this._services, [name]: s } as NewServices;
+    return new GrpcServer<NewServices>(this._server, services);
   }
 
-  add<T extends {} = UntypedServiceImplementation>(s: Service<T>) {
-    this.server.addService(s.definition, s.implementation);
-    return this;
-  }
-
-  listen(
+  public listen(
     ...args:
       | [string, ServerCredentials, ListenCallback]
       | [string, ListenCallback]
-  ) {
-    if (args.length === 3) return this.server.bindAsync(...args);
-    this.server.bindAsync(args[0], ServerCredentials.createInsecure(), args[1]);
+  ): GrpcServer<Services> {
+    if (args.length === 3) this._server.bindAsync(...args);
+    else
+      this._server.bindAsync(
+        args[0],
+        ServerCredentials.createInsecure(),
+        args[1],
+      );
+
+    return this;
+  }
+
+  public get server(): Server {
+    return this._server;
+  }
+
+  static create(serverOptions: ServerOptions = {}) {
+    return new GrpcServer(new Server(serverOptions), {});
   }
 }
 
 export function grpc(opts?: ServerOptions) {
-  return new GrpcServer(opts);
+  return GrpcServer.create(opts);
 }
