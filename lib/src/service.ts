@@ -2,6 +2,13 @@ import type {
   ServiceDefinition,
   UntypedServiceImplementation,
 } from "@grpc/grpc-js";
+import {
+  AbstractedImplementation,
+  getRpcType,
+  rpc,
+  RpcFn,
+  RpcTypes,
+} from "./rpc";
 
 export class Service<U = UntypedServiceImplementation> {
   constructor(
@@ -12,7 +19,16 @@ export class Service<U = UntypedServiceImplementation> {
 
 export function service<U = UntypedServiceImplementation>(
   definition: ServiceDefinition<U>,
-  implementation: U,
+  absImplementation: AbstractedImplementation<U>,
 ) {
+  const implementation = Object.fromEntries(
+    Object.entries(absImplementation).map(([method, handler]) => [
+      method,
+      rpc<any, any, RpcTypes>(
+        getRpcType(definition, method as keyof U),
+        handler as RpcFn,
+      ),
+    ]),
+  ) as U;
   return new Service(definition, implementation);
 }

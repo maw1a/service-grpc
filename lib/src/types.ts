@@ -41,3 +41,7 @@ export type CreateClientFunction<
     | [Partial<ChannelOptions>]
     | []
 ) => TypedServiceClient<ImplementationType>;
+
+export type Simplify<T> = {
+  [K in keyof T]: T[K];
+} & {};

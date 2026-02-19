@@ -6,6 +6,10 @@ import {
 } from "examples/use-zod-schemas/.gen/user.service";
 
 export const Greeter = service<UserServiceServer>(UserServiceService, {
-  createUser() {},
-  getUser() {},
+  createUser(ctx) {
+    return ctx.res.ok({ id: 1 });
+  },
+  getUser(ctx) {
+    return ctx.res.ok({ id: 1 });
+  },
 });
