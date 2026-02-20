@@ -1,5 +1,7 @@
 import { service } from "@maw1a/service-grpc";
 
+import { v4 } from "uuid";
+
 import {
   UserServiceServer,
   UserServiceService,
@@ -7,9 +9,13 @@ import {
 
 export const Greeter = service<UserServiceServer>(UserServiceService, {
   createUser(ctx) {
-    return ctx.res.ok({ id: 1 });
+    return ctx.res.ok({ id: v4() });
   },
   getUser(ctx) {
-    return ctx.res.ok({ id: 1 });
+    return ctx.res.ok({
+      age: 25,
+      email: "ahmedmawia.dev@gmail.com",
+      name: "Ahmed Mawia",
+    });
   },
 });

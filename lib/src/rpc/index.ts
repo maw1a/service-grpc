@@ -2,6 +2,7 @@ import type {
   ServiceDefinition,
   UntypedServiceImplementation,
 } from "@grpc/grpc-js";
+import type { HandleCall } from "@grpc/grpc-js/build/src/server-call";
 import type { BidiStreamingRpcFn } from "./bidi";
 import type { ClientStreamingRpcFn } from "./client-streaming";
 import type { ServerStreamingRpcFn } from "./server-streaming";
@@ -12,6 +13,15 @@ import { clientStreamingRpc } from "./client-streaming";
 import { serverStreamingRpc } from "./server-streaming";
 import { unaryRpc } from "./unary";
 
+type ValueOf<T> = T[keyof T];
+
+const registry = {
+  unary: unaryRpc,
+  "client-streaming": clientStreamingRpc,
+  "server-streaming": serverStreamingRpc,
+  bidi: bidiStreamingRpc,
+};
+
 type RpcHandlers<Req, Res> = {
   unary: UnaryRpcFn<Req, Res>;
   "client-streaming": ClientStreamingRpcFn<Req, Res>;
@@ -19,24 +29,12 @@ type RpcHandlers<Req, Res> = {
   bidi: BidiStreamingRpcFn<Req, Res>;
 };
 
-type ValueOf<T> = T[keyof T];
-
-const registry: {
-  [K in keyof RpcHandlers<any, any>]: <Req, Res>(
-    handler: RpcHandlers<Req, Res>[K],
-  ) => void;
-} = {
-  unary: unaryRpc,
-  "client-streaming": clientStreamingRpc,
-  "server-streaming": serverStreamingRpc,
-  bidi: bidiStreamingRpc,
-};
-
-export function rpc<Req, Res, K extends keyof RpcHandlers<any, any>>(
+export function rpc<Req, Res, K extends keyof RpcHandlers<Req, Res>>(
   type: K,
   handler: RpcHandlers<Req, Res>[K],
 ) {
-  registry[type](handler);
+  const rpcHandler = registry[type];
+  return rpcHandler(handler as any);
 }
 
 export function getRpcType<SD extends ServiceDefinition, Name extends keyof SD>(
@@ -72,6 +70,9 @@ export type GetRpcType<U, Name extends keyof U> = RpcTypeFromServiceDefinition<
   Name
 >;
 
-export type AbstractedImplementation<U = UntypedServiceImplementation> = {
-  [Name in keyof U]: RpcHandlers<any, any>[GetRpcType<U, Name>];
+type PipedRpcHandler<Call extends HandleCall<any, any>> =
+  Call extends HandleCall<infer Req, infer Res> ? RpcHandlers<Req, Res> : never;
+
+export type AbstractedImplementation<U extends UntypedServiceImplementation> = {
+  [Name in keyof U]: PipedRpcHandler<U[Name]>[GetRpcType<U, Name>];
 };

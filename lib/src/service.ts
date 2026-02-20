@@ -17,7 +17,7 @@ export class Service<U = UntypedServiceImplementation> {
   ) {}
 }
 
-export function service<U = UntypedServiceImplementation>(
+export function service<U extends UntypedServiceImplementation>(
   definition: ServiceDefinition<U>,
   absImplementation: AbstractedImplementation<U>,
 ) {
