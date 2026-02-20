@@ -1,12 +1,8 @@
 import type { handleClientStreamingCall } from "@grpc/grpc-js";
-import type { RequestStreamingContext } from "./context";
+import type { ClientStreamingRpcFn } from "./types";
 
 import { defaultResponse } from "./helpers";
 import { RpcResponse } from "./response";
-
-export type ClientStreamingRpcFn<Req, Res> = (
-  ctx: RequestStreamingContext<Req, Res>,
-) => RpcResponse<Res> | Promise<RpcResponse<Res>>;
 
 export function clientStreamingRpc<Req, Res>(
   fn: ClientStreamingRpcFn<Req, Res>,

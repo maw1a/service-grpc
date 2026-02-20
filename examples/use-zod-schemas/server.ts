@@ -4,7 +4,7 @@ import { PORT, SERVICE_OPTIONS } from "./constants";
 import { Greeter } from "./services/user";
 
 export const server = grpc(SERVICE_OPTIONS)
-  .add("greeter.Greeter", Greeter)
+  .add("user.service.UserService", Greeter)
   .listen(`0.0.0.0:${PORT}`, async (error, port) => {
     if (error) {
       console.error(`Failed to start the server error: ${error.message}`, {

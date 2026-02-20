@@ -2,13 +2,9 @@ import type {
   ServiceDefinition,
   UntypedServiceImplementation,
 } from "@grpc/grpc-js";
-import {
-  AbstractedImplementation,
-  getRpcType,
-  rpc,
-  RpcFn,
-  RpcTypes,
-} from "./rpc";
+import type { AbstractedImplementation, RpcFn, RpcTypes } from "./rpc";
+
+import { getRpcType, rpc } from "./rpc";
 
 export class Service<U = UntypedServiceImplementation> {
   constructor(

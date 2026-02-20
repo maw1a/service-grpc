@@ -4,4 +4,5 @@ export type * from "./types";
 
 export { client } from "./client";
 export { grpc } from "./grpc";
+export * from "./rpc";
 export { service } from "./service";

@@ -1,12 +1,8 @@
 import type { handleUnaryCall } from "@grpc/grpc-js";
-import type { UnaryContext } from "./context";
+import type { UnaryRpcFn } from "./types";
 
 import { defaultResponse } from "./helpers";
 import { RpcResponse } from "./response";
-
-export type UnaryRpcFn<Req, Res> = (
-  ctx: UnaryContext<Req, Res>,
-) => RpcResponse<Res> | Promise<RpcResponse<Res>>;
 
 export function unaryRpc<Req, Res>(
   fn: UnaryRpcFn<Req, Res>,
