@@ -1,8 +1,8 @@
-import type { ChannelOptions } from "@grpc/grpc-js";
+import type { ChannelOptions, Client } from "@grpc/grpc-js";
 
 import { ChannelCredentials } from "@grpc/grpc-js";
 
-type Client<T> = {
+type ClientConstructor<T> = {
   new (
     address: string,
     credentials: ChannelCredentials,
@@ -10,7 +10,7 @@ type Client<T> = {
   ): T;
 };
 
-export function client<T>(ServiceClient: Client<T>) {
+export function client<T extends Client>(ServiceClient: ClientConstructor<T>) {
   return (
     address: string,
     ...args:
@@ -25,6 +25,8 @@ export function client<T>(ServiceClient: Client<T>) {
         : ChannelCredentials.createInsecure();
     const options = args[1] || {};
 
-    return new ServiceClient(address, credentials, options);
+    const client = new ServiceClient(address, credentials, options);
+
+    return client;
   };
 }

@@ -3,20 +3,31 @@
   "name": "@maw1a/service-grpc-examples.basic",
   "version": "0.0.0",
   "description": "",
-  "main": "server.ts",
+  "main": "./dist/clients.cjs",
+  "module": "./dist/clients.mjs",
+  "exports": {
+    "./clients": {
+      "types": "./dist/clients.d.ts",
+      "require": "./dist/clients.cjs",
+      "import": "./dist/clients.mjs"
+    }
+  },
+  "types": "./dist/clients.d.ts",
   "scripts": {
     "start": "tsx server.ts",
     "build:protos": "buf generate",
-    "build:clients": "tsc clients.ts --outDir dist"
+    "build:clients": "tsup"
   },
   "dependencies": {
     "@grpc/grpc-js": "^1.14.3",
-    "@maw1a/service-grpc": "workspace:*"
+    "@maw1a/service-grpc": "workspace:*",
+    "@maw1a/service-grpc-examples.use-zod-schemas": "workspace:*"
   },
   "devDependencies": {
     "@bufbuild/buf": "^1.65.0",
     "@bufbuild/protobuf": "^2.11.0",
     "@types/node": "^25.2.3",
+    "tsup": "^8.5.1",
     "tsx": "^4.21.0",
     "typescript": "^5.9.3"
   },

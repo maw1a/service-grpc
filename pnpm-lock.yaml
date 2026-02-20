@@ -20,6 +20,9 @@ importers:
       '@maw1a/service-grpc':
         specifier: workspace:*
         version: link:../../lib
+      '@maw1a/service-grpc-examples.use-zod-schemas':
+        specifier: workspace:*
+        version: link:../use-zod-schemas
     devDependencies:
       '@bufbuild/buf':
         specifier: ^1.65.0
@@ -30,6 +33,9 @@ importers:
       '@types/node':
         specifier: ^25.2.3
         version: 25.2.3
+      tsup:
+        specifier: ^8.5.1
+        version: 8.5.1(tsx@4.21.0)(typescript@5.9.3)
       tsx:
         specifier: ^4.21.0
         version: 4.21.0
@@ -48,6 +54,9 @@ importers:
       '@maw1a/service-grpc':
         specifier: workspace:*
         version: link:../../lib
+      '@maw1a/service-grpc-examples.basic':
+        specifier: workspace:*
+        version: link:../basic
       uuid:
         specifier: ^13.0.0
         version: 13.0.0
@@ -61,6 +70,9 @@ importers:
       '@bufbuild/protobuf':
         specifier: ^2.11.0
         version: 2.11.0
+      tsup:
+        specifier: ^8.5.1
+        version: 8.5.1(tsx@4.21.0)(typescript@5.9.3)
       tsx:
         specifier: ^4.21.0
         version: 4.21.0

@@ -2,7 +2,7 @@ import { z } from "zod";
 
 import type { ZodToProtoBufOptions } from "./types";
 
-const userSchema = z.object({
+export const userSchema = z.object({
   name: z.string(),
   age: z.number(),
   email: z.string().email(),

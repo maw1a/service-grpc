@@ -3,22 +3,34 @@
   "name": "@maw1a/service-grpc-examples.use-zod-schemas",
   "version": "0.0.0",
   "description": "",
-  "main": "server.ts",
+  "main": "./dist/clients.cjs",
+  "module": "./dist/clients.mjs",
+  "exports": {
+    "./clients": {
+      "types": "./dist/clients.d.ts",
+      "require": "./dist/clients.cjs",
+      "import": "./dist/clients.mjs"
+    }
+  },
+  "types": "./dist/clients.d.ts",
   "scripts": {
     "start": "tsx server.ts",
     "build:schemas": "tsx schemas/build.ts",
-    "build:protos": "pnpm build:schemas && buf generate"
+    "build:protos": "pnpm build:schemas && buf generate",
+    "build:clients": "tsup"
   },
   "dependencies": {
     "@globalart/zod-to-proto": "^2.1.0",
     "@grpc/grpc-js": "^1.14.3",
     "@maw1a/service-grpc": "workspace:*",
+    "@maw1a/service-grpc-examples.basic": "workspace:*",
     "uuid": "^13.0.0",
     "zod": "^4.3.6"
   },
   "devDependencies": {
     "@bufbuild/buf": "^1.65.0",
     "@bufbuild/protobuf": "^2.11.0",
+    "tsup": "^8.5.1",
     "tsx": "^4.21.0"
   },
   "keywords": [],

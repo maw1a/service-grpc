@@ -9,5 +9,5 @@
     "baseUrl": "."
   },
   "include": ["examples", "lib/src"],
-  "exclude": ["**/dist"]
+  "exclude": ["**/dist", "**/tsup.config.ts"]
 }
