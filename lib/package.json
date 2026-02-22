@@ -1,6 +1,6 @@
 {
   "name": "@maw1a/service-grpc",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "A guide to building grpc services with typescript.",
   "keywords": [
     "grpc",
@@ -11,6 +11,16 @@
   ],
   "author": "maw1a <ahmedmawia.dev@gmail.com",
   "license": "ISC",
+  "homepage": "https://github.com/maw1a/service-grpc#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/maw1a/service-grpc.git",
+    "directory": "lib"
+  },
+  "bugs": {
+    "url": "https://github.com/maw1a/service-grpc/issues"
+  },
+  "discussions": "https://github.com/maw1a/service-grpc/discussions",
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.mjs",
