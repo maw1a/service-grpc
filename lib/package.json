@@ -1,6 +1,9 @@
 {
   "name": "@maw1a/service-grpc",
   "version": "1.0.0",
+  "publishConfig": {
+    "access": "public"
+  },
   "description": "A guide to building grpc services with typescript.",
   "keywords": [
     "grpc",
