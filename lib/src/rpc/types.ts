@@ -1,5 +1,8 @@
 import type {
-  ServiceDefinition,
+  handleBidiStreamingCall,
+  handleClientStreamingCall,
+  handleServerStreamingCall,
+  handleUnaryCall,
   UntypedServiceImplementation,
 } from "@grpc/grpc-js";
 import type { HandleCall } from "@grpc/grpc-js/build/src/server-call";
@@ -40,27 +43,69 @@ export type RpcHandlers<Req, Res> = {
   bidi: BidiStreamingRpcFn<Req, Res>;
 };
 
-type RpcTypeFromServiceDefinition<
-  SD extends ServiceDefinition,
-  Name extends keyof SD,
-> = SD[Name] extends { requestStream: true; responseStream: true }
+type RpcTypeFromHandler<H> = H extends handleBidiStreamingCall<any, any>
   ? "bidi"
-  : SD[Name] extends { requestStream: true }
+  : H extends handleClientStreamingCall<any, any>
     ? "client-streaming"
-    : SD[Name] extends { responseStream: true }
+    : H extends handleServerStreamingCall<any, any>
       ? "server-streaming"
-      : "unary";
-
-type GetRpcType<U, Name extends keyof U> = RpcTypeFromServiceDefinition<
-  ServiceDefinition<U>,
-  Name
->;
+      : H extends handleUnaryCall<any, any>
+        ? "unary"
+        : "unary";
 
 type PipedRpcHandler<Call extends HandleCall<any, any>> =
   Call extends HandleCall<infer Req, infer Res> ? RpcHandlers<Req, Res> : never;
 
 export type AbstractedImplementation<U extends UntypedServiceImplementation> = {
-  [Name in keyof U]: PipedRpcHandler<U[Name]>[GetRpcType<U, Name>];
+  [Name in keyof U]: PipedRpcHandler<U[Name]>[RpcTypeFromHandler<U[Name]>];
+};
+
+type DefinitionRequest<M> = M extends {
+  requestSerialize: (value: infer Req) => Buffer;
+}
+  ? Req
+  : never;
+
+type DefinitionResponse<M> = M extends {
+  responseDeserialize: (value: Buffer) => infer Res;
+}
+  ? Res
+  : never;
+
+export type ServiceDefinitionLike = Record<
+  string,
+  {
+    readonly requestStream: boolean;
+    readonly responseStream: boolean;
+    readonly requestSerialize: (value: unknown) => Buffer;
+    readonly responseDeserialize: (value: Buffer) => unknown;
+  }
+>;
+
+type RpcTypeFromDefinitionMethod<M> =
+  M extends { readonly requestStream: true; readonly responseStream: true }
+    ? "bidi"
+    : M extends { readonly requestStream: true; readonly responseStream: false }
+      ? "client-streaming"
+      : M extends {
+            readonly requestStream: false;
+            readonly responseStream: true;
+          }
+        ? "server-streaming"
+        : M extends {
+              readonly requestStream: false;
+              readonly responseStream: false;
+            }
+          ? "unary"
+          : RpcTypes;
+
+export type AbstractedImplementationFromDefinition<
+  SD extends ServiceDefinitionLike,
+> = {
+  [Name in keyof SD]: RpcHandlers<
+    DefinitionRequest<SD[Name]>,
+    DefinitionResponse<SD[Name]>
+  >[RpcTypeFromDefinitionMethod<SD[Name]>];
 };
 
 export type RpcFn = ValueOf<RpcHandlers<any, any>>;

@@ -9,10 +9,12 @@ import { unaryRpc } from "./unary";
 export type * from "./context";
 export type {
   AbstractedImplementation,
+  AbstractedImplementationFromDefinition,
   BidiStreamingRpcFn,
   ClientStreamingRpcFn,
   RpcFn,
   RpcTypes,
+  ServiceDefinitionLike,
   ServerStreamingRpcFn,
   UnaryRpcFn,
 } from "./types";
@@ -36,11 +38,10 @@ export function getRpcType<SD extends ServiceDefinition, Name extends keyof SD>(
   definition: SD,
   method: Name,
 ) {
-  return definition[method]
-    ? "bidi"
-    : definition[method]
-      ? "client-streaming"
-      : definition[method]
-        ? "server-streaming"
-        : "unary";
+  const rpcDefinition = definition[method];
+  if (!rpcDefinition) return "unary";
+  if (rpcDefinition.requestStream && rpcDefinition.responseStream) return "bidi";
+  if (rpcDefinition.requestStream) return "client-streaming";
+  if (rpcDefinition.responseStream) return "server-streaming";
+  return "unary";
 }

@@ -1,0 +1,38 @@
+syntax = "proto3";
+
+package streaming.demo;
+
+service StreamingDemo {
+  rpc Echo (EchoRequest) returns (EchoReply);
+  rpc Sum (stream SumRequest) returns (SumReply);
+  rpc Countdown (CountdownRequest) returns (stream CountdownReply);
+  rpc Chat (stream ChatMessage) returns (stream ChatMessage);
+}
+
+message EchoRequest {
+  string message = 1;
+}
+
+message EchoReply {
+  string message = 1;
+}
+
+message SumRequest {
+  int32 value = 1;
+}
+
+message SumReply {
+  int32 total = 1;
+}
+
+message CountdownRequest {
+  int32 from = 1;
+}
+
+message CountdownReply {
+  int32 value = 1;
+}
+
+message ChatMessage {
+  string message = 1;
+}
